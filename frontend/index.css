@@ -1,0 +1,5 @@
+@import url('tldraw/tldraw.css');
+@import './css/reset.css';
+@import 'tailwindcss';
+@import './css/global.css';
+@import './css/scrollbar.css';

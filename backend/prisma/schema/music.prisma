@@ -1,0 +1,92 @@
+enum PlaylistType {
+  FAVORITE_TRACK
+  FAVORITE_ALBUM
+  FAVORITE_ARTIST
+  CUSTOM
+}
+
+model Album {
+  id          String    @id @default(uuid())
+  name        String
+  image       String
+  releaseDate DateTime?
+  createdAt   DateTime  @default(now())
+
+  tracks  Track[]
+  artists Artist[]
+
+  userPlaylists UserPlaylist[]
+  uploaderId    String
+  uploader      User           @relation("UserUploadedAlbums", fields: [uploaderId], references: [id])
+
+  @@map("albums")
+}
+
+model Track {
+  id           String   @id @default(uuid())
+  title        String
+  thumbnailUrl String?
+  duration     Int
+  audioUrl     String
+  lyrics       Json?
+  createdAt    DateTime @default(now())
+
+  albumId String?
+  album   Album?  @relation(fields: [albumId], references: [id])
+
+  artists Artist[]
+
+  playlists     Playlist[]
+  userPlaylists UserPlaylist[]
+
+  uploaderId String
+  uploader   User   @relation("UserUploadedTracks", fields: [uploaderId], references: [id])
+
+  @@map("tracks")
+}
+
+model Artist {
+  id          String  @id @default(uuid())
+  name        String
+  image       String
+  description String?
+  followers   Int     @default(0)
+
+  albums Album[]
+  tracks Track[]
+
+  userPlaylists UserPlaylist[]
+
+  @@map("artists")
+}
+
+model Playlist {
+  id          String    @id @default(uuid())
+  name        String
+  image       String
+  releaseDate DateTime?
+  createdAt   DateTime  @default(now())
+
+  tracks Track[]
+
+  @@map("playlists")
+}
+
+model UserPlaylist {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  image       String?
+  type        PlaylistType @default(CUSTOM)
+  isPublic    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  tracks  Track[]
+  albums  Album[]
+  artists Artist[]
+
+  @@map("user_playlists")
+}

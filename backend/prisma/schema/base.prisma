@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  PENDING_VERIFICATION
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+}
+
+enum PlatformScope {
+  GLOBAL // Toàn hệ thống / SuperAdmin
+  AUTH // Tài khoản & Thanh toán
+  MUSIC
+  FILM
+  WHITEBOARD
+}

@@ -1,0 +1,127 @@
+model User {
+  id        String        @id @default(uuid())
+  email     String        @unique
+  password  String?
+  fullName  String
+  avatarUrl String?
+  status    AccountStatus @default(ACTIVE)
+  provider  AuthProvider  @default(LOCAL)
+  googleId  String?       @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userRoles     UserRoleAssignment[]
+  refreshTokens RefreshToken[]
+
+  filmWatchHistory FilmWatchHistory[]
+  filmFavorites    FilmFavorite[]
+  settings         UserSettings?
+  actionLogs       UserActionLog[]
+
+  userPlaylists  UserPlaylist[]
+  uploadedTracks Track[]        @relation("UserUploadedTracks")
+  uploadedAlbums Album[]        @relation("UserUploadedAlbums")
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  userId     String
+  tokenHash  String   @unique
+  deviceInfo String?
+  isRevoked  Boolean  @default(false)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Role {
+  id          String        @id @default(uuid())
+  slug        String        @unique // VD: "film_reviewer", "music_artist"
+  name        String
+  description String?
+  scope       PlatformScope @default(GLOBAL)
+  isSystem    Boolean       @default(false)
+
+  permissions RolePermission[]
+  users       UserRoleAssignment[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String        @id @default(uuid())
+  slug        String        @unique // VD: "film:create", "music:upload"
+  name        String
+  scope       PlatformScope
+  description String?
+
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model UserRoleAssignment {
+  userId     String
+  roleId     String
+  scope      PlatformScope @default(GLOBAL)
+  assignedAt DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId, scope])
+  @@index([userId])
+  @@map("user_role_assignments")
+}
+
+model UserSettings {
+  userId         String  @id
+  theme          String  @default("dark")
+  language       String  @default("vi")
+  fontFamily     String  @default("inter")
+  accentColor    String  @default("#6366f1")
+  fontSize       String  @default("md")
+  sidebarCompact Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model UserActionLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String // "FILM_WATCH", "MUSIC_PLAY", "WHITEBOARD_EDIT", "PAGE_VIEW"
+  module    String // "FILM", "MUSIC", "WHITEBOARD", "AUTH"
+  metadata  Json? // { filmSlug, trackId, boardId, etc. }
+  ipAddress String?
+  userAgent String?
+  sessionId String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([module])
+  @@index([createdAt])
+  @@map("user_action_logs")
+}
