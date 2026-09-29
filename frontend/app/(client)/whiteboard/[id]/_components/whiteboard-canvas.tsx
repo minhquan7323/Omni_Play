@@ -43,7 +43,9 @@ const WhiteboardCanvas = ({ boardId, boardName }: WhiteboardCanvasProps) => {
     const [store] = useState(() =>
         createTLStore({ shapeUtils: defaultShapeUtils }),
     );
-    const sidebarWidth = sidebar.isPinned ? sidebar.width : MAIN_SIDEBAR_CONFIG.COLLAPSED_WIDTH;
+    const sidebarWidth = sidebar.isPinned
+        ? sidebar.width
+        : MAIN_SIDEBAR_CONFIG.COLLAPSED_WIDTH;
 
     const uploadThumbnail = useCallback(
         async (editor: Editor) => {
@@ -69,7 +71,7 @@ const WhiteboardCanvas = ({ boardId, boardName }: WhiteboardCanvasProps) => {
                 );
 
                 await axios.patch(
-                    `http://localhost:3001/api/whiteboards/${boardId}/thumbnail`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/whiteboards/${boardId}/thumbnail`,
                     formData,
                     {
                         headers: {
@@ -124,7 +126,7 @@ const WhiteboardCanvas = ({ boardId, boardName }: WhiteboardCanvasProps) => {
     useEffect(() => {
         if (!boardId || !auth?.accessToken) return;
 
-        const socket: Socket = io('http://localhost:3001/whiteboard', {
+        const socket: Socket = io(`${process.env.NEXT_PUBLIC_URL}/whiteboard`, {
             query: { boardId, token: auth.accessToken },
         });
 

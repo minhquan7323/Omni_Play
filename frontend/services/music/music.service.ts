@@ -3,6 +3,20 @@ import privateApi from '../api/private.api';
 export const MusicService = {
     //------------------------------------------------------------------ SEARCH ------------------------------------------------------------------
 
+    searchTracks: async (options?: {
+        page?: number;
+        limit?: number;
+        keyword?: string;
+    }) => {
+        const params = new URLSearchParams();
+        if (options?.page) params.set('page', options.page.toString());
+        if (options?.limit) params.set('limit', options.limit.toString());
+        if (options?.keyword) params.set('keyword', options.keyword.toString());
+        return privateApi.get(
+            `/music/search` +
+                (params.toString() ? `?${params.toString()}` : ''),
+        );
+    },
 
     //------------------------------------------------------------------ CONTENT ------------------------------------------------------------------
 
@@ -25,7 +39,9 @@ export const MusicService = {
     },
 
     checkLibraryItem: async (type: string, itemId: string) => {
-        return privateApi.get(`/music/library/check?type=${type}&itemId=${itemId}`);
+        return privateApi.get(
+            `/music/library/check?type=${type}&itemId=${itemId}`,
+        );
     },
 
     //------------------------------------------------------------------ PLAYLIST ------------------------------------------------------------------
@@ -33,16 +49,16 @@ export const MusicService = {
     createPlaylist: async (data: any) => {
         return privateApi.post('/music/playlist', data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
     updatePlaylist: async (id: string, data: any) => {
         return privateApi.patch(`/music/playlist/${id}`, data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
@@ -51,7 +67,9 @@ export const MusicService = {
     },
 
     getUserPlaylists: async (type?: string) => {
-        return privateApi.get('/music/library/playlists' + (type ? `?type=${type}` : ''));
+        return privateApi.get(
+            '/music/library/playlists' + (type ? `?type=${type}` : ''),
+        );
     },
 
     getPlaylistDetail: async (id: string) => {
@@ -65,21 +83,30 @@ export const MusicService = {
     },
 
     getArtistRadio: async (artistId: string, limit?: number) => {
-        return privateApi.get(`/music/artist/${artistId}/radio` + (limit ? `?limit=${limit}` : ''));
+        return privateApi.get(
+            `/music/artist/${artistId}/radio` +
+                (limit ? `?limit=${limit}` : ''),
+        );
     },
 
-    getArtistAlbums: async (artistId: string, query?: { page?: number, limit?: number }) => {
+    getArtistAlbums: async (
+        artistId: string,
+        query?: { page?: number; limit?: number },
+    ) => {
         const params = new URLSearchParams();
         if (query?.page) params.set('page', query.page.toString());
         if (query?.limit) params.set('limit', query.limit.toString());
-        return privateApi.get(`/music/artist/${artistId}/albums` + (params.toString() ? `?${params.toString()}` : ''));
+        return privateApi.get(
+            `/music/artist/${artistId}/albums` +
+                (params.toString() ? `?${params.toString()}` : ''),
+        );
     },
 
     createArtist: async (data: any) => {
         return privateApi.post('/music/cms/artist', data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
@@ -90,8 +117,8 @@ export const MusicService = {
     updateArtist: async (id: string, data: any) => {
         return privateApi.patch(`/music/cms/artist/${id}`, data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
@@ -108,16 +135,16 @@ export const MusicService = {
     updateAlbum: async (id: string, data: any) => {
         return privateApi.patch(`/music/cms/album/${id}`, data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
     createAlbum: async (data: any) => {
         return privateApi.post('/music/cms/album', data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
@@ -134,8 +161,8 @@ export const MusicService = {
     createTrack: async (data: any) => {
         return privateApi.post('/music/cms/track', data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 
@@ -146,8 +173,8 @@ export const MusicService = {
     updateTrack: async (id: string, data: any) => {
         return privateApi.patch(`/music/cms/track/${id}`, data, {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+            },
         });
     },
 };

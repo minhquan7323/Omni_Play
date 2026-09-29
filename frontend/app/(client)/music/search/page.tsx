@@ -21,36 +21,50 @@ export default function MusicSearchPage() {
 
     const { data, isLoading, isFetching } = useQuery({
         queryKey: ['music-search', debouncedQuery],
-        queryFn: () => MusicService.search(debouncedQuery),
+        queryFn: () => MusicService.searchTracks({ keyword: debouncedQuery }),
         select: (res: any) => res?.data || [],
         enabled: debouncedQuery.length >= 1,
     });
 
     const handlePlay = (track: any, queue: any[]) => {
-        dispatch(setTrack({
-            track: {
-                id: track.id,
-                title: track.title,
-                artists: track.artists || [{ id: 'unknown', name: track.artist || track.user?.name || 'Unknown' }],
-                duration: track.duration,
-                thumbnailUrl: track.thumbnailUrl || track.artwork?.['480x480'],
-                audioUrl: track.streamUrl || null,
-                lyrics: track.lyrics,
-            },
-            context: queue.map(t => ({
-                id: t.id,
-                title: t.title,
-                artists: t.artists || [{ id: 'unknown', name: t.artist || t.user?.name || 'Unknown' }],
-                duration: t.duration,
-                thumbnailUrl: t.thumbnailUrl || t.artwork?.['480x480'],
-                audioUrl: t.streamUrl || null,
-                lyrics: t.lyrics,
-            })),
-            contextName: 'Search results',
-        }));
+        dispatch(
+            setTrack({
+                track: {
+                    id: track.id,
+                    title: track.title,
+                    artists: track.artists || [
+                        {
+                            id: 'unknown',
+                            name: track.artist || track.user?.name || 'Unknown',
+                        },
+                    ],
+                    duration: track.duration,
+                    thumbnailUrl:
+                        track.thumbnailUrl || track.artwork?.['480x480'],
+                    audioUrl: track.streamUrl || null,
+                    lyrics: track.lyrics,
+                },
+                context: queue.map((t) => ({
+                    id: t.id,
+                    title: t.title,
+                    artists: t.artists || [
+                        {
+                            id: 'unknown',
+                            name: t.artist || t.user?.name || 'Unknown',
+                        },
+                    ],
+                    duration: t.duration,
+                    thumbnailUrl: t.thumbnailUrl || t.artwork?.['480x480'],
+                    audioUrl: t.streamUrl || null,
+                    lyrics: t.lyrics,
+                })),
+                contextName: 'Search results',
+            }),
+        );
     };
 
-    const formatDuration = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+    const formatDuration = (s: number) =>
+        `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
     return (
         <div className="min-h-screen pb-24">
@@ -69,7 +83,7 @@ export default function MusicSearchPage() {
                     <input
                         type="text"
                         value={query}
-                        onChange={e => setQuery(e.target.value)}
+                        onChange={(e) => setQuery(e.target.value)}
                         placeholder="Tìm kiếm bài hát, nghệ sĩ..."
                         autoFocus
                         className="w-full pl-12 pr-12 py-3 bg-card border border-border rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
@@ -94,19 +108,26 @@ export default function MusicSearchPage() {
                         className="text-center py-16"
                     >
                         <Music className="w-16 h-16 text-muted-foreground/20 mx-auto mb-3" />
-                        <p className="text-muted-foreground text-sm">Nhập tên bài hát hoặc nghệ sĩ để tìm kiếm</p>
+                        <p className="text-muted-foreground text-sm">
+                            Nhập tên bài hát hoặc nghệ sĩ để tìm kiếm
+                        </p>
                     </motion.div>
                 ) : isLoading || isFetching ? (
                     <motion.div key="loading" className="space-y-2">
-                        {Array(8).fill(0).map((_, i) => (
-                            <div key={i} className="flex items-center gap-3 p-3 animate-pulse">
-                                <div className="w-12 h-12 bg-white/5 rounded-xl" />
-                                <div className="flex-1">
-                                    <div className="h-3 bg-white/5 rounded w-2/3 mb-2" />
-                                    <div className="h-2 bg-white/5 rounded w-1/3" />
+                        {Array(8)
+                            .fill(0)
+                            .map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="flex items-center gap-3 p-3 animate-pulse"
+                                >
+                                    <div className="w-12 h-12 bg-white/5 rounded-xl" />
+                                    <div className="flex-1">
+                                        <div className="h-3 bg-white/5 rounded w-2/3 mb-2" />
+                                        <div className="h-2 bg-white/5 rounded w-1/3" />
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                     </motion.div>
                 ) : data?.length === 0 ? (
                     <motion.div
@@ -115,7 +136,10 @@ export default function MusicSearchPage() {
                         animate={{ opacity: 1 }}
                         className="text-center py-16"
                     >
-                        <p className="text-muted-foreground">Không tìm thấy kết quả cho &ldquo;{debouncedQuery}&rdquo;</p>
+                        <p className="text-muted-foreground">
+                            Không tìm thấy kết quả cho &ldquo;{debouncedQuery}
+                            &rdquo;
+                        </p>
                     </motion.div>
                 ) : (
                     <motion.div
@@ -126,7 +150,8 @@ export default function MusicSearchPage() {
                     >
                         <div className="px-4 py-3 border-b border-border">
                             <p className="text-xs text-muted-foreground">
-                                {data?.length} kết quả cho &ldquo;{debouncedQuery}&rdquo;
+                                {data?.length} kết quả cho &ldquo;
+                                {debouncedQuery}&rdquo;
                             </p>
                         </div>
                         {data?.map((track: any, i: number) => (
@@ -139,9 +164,13 @@ export default function MusicSearchPage() {
                                 className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors group border-b border-border/30 last:border-b-0"
                             >
                                 <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-border/40 flex-shrink-0">
-                                    {track.thumbnailUrl || track.artwork?.['150x150'] ? (
+                                    {track.thumbnailUrl ||
+                                    track.artwork?.['150x150'] ? (
                                         <Image
-                                            src={track.thumbnailUrl || track.artwork?.['150x150']}
+                                            src={
+                                                track.thumbnailUrl ||
+                                                track.artwork?.['150x150']
+                                            }
                                             alt={track.title}
                                             fill
                                             className="object-cover"
