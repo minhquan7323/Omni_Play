@@ -100,7 +100,9 @@ export function FeaturedSlider({ films = [] }: FeaturedSliderProps) {
                             src={bannerImage}
                             alt={currentFilm.name}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             priority
+                            loading="eager"
                             className="object-cover object-center pointer-events-none"
                             onError={(e: any) => {
                                 e.currentTarget.src = '/placeholder-film.jpg';
@@ -199,10 +201,11 @@ export function FeaturedSlider({ films = [] }: FeaturedSliderProps) {
                                 <div
                                     key={film.slug || film._id || idx}
                                     onClick={() => handleSelectFilm(idx)}
-                                    className={`relative shrink-0 w-22 sm:w-26 aspect-[2/3] rounded-md overflow-hidden cursor-pointer transition-all duration-300 ${isSelected
-                                        ? 'scale-110 -translate-y-2 border-2 border-primary ring-4 ring-primary/30 z-10'
-                                        : 'border border-white/15 hover:scale-105'
-                                        }`}
+                                    className={`relative shrink-0 w-22 sm:w-26 aspect-[2/3] rounded-md overflow-hidden cursor-pointer transition-all duration-300 ${
+                                        isSelected
+                                            ? 'scale-110 -translate-y-2 border-2 border-primary ring-4 ring-primary/30 z-10'
+                                            : 'border border-white/15 hover:scale-105'
+                                    }`}
                                 >
                                     <Image
                                         src={imgUrl(film.poster_url)}

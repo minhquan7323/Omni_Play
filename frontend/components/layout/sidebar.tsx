@@ -4,7 +4,14 @@ import { MAIN_SIDEBAR_CONFIG, SidebarId } from '@/constants/sidebar.constant';
 import { useResizable } from '@/hooks/useResizable';
 import { setWidth, togglePinned } from '@/store/slices/sidebar.slice';
 import { LayoutGroup, motion } from 'framer-motion';
-import { Film, LayoutDashboard, Music, Pin, PinOff } from 'lucide-react';
+import {
+    Film,
+    Gamepad,
+    LayoutDashboard,
+    Music,
+    Pin,
+    PinOff,
+} from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +23,12 @@ const NAV_ITEMS: NavItem[] = [
         icon: <LayoutDashboard className="w-5 h-5" />,
         label: 'Whiteboard',
         href: '/whiteboard',
+    },
+    {
+        id: 'liars-bar',
+        icon: <Gamepad className="w-5 h-5" />,
+        label: "Liar's Bar",
+        href: '/liars-bar',
     },
     {
         id: 'film',
@@ -38,7 +51,9 @@ export default function Sidebar() {
     const router = useRouter();
     const pathname = usePathname();
 
-    const sidebar = useSelector((state: any) => state.sidebar?.[SidebarId.MAIN]);
+    const sidebar = useSelector(
+        (state: any) => state.sidebar?.[SidebarId.MAIN],
+    );
 
     const [isHovered, setIsHovered] = useState(false);
     const hoverTimerRef = useRef(null);
@@ -48,15 +63,21 @@ export default function Sidebar() {
         min: MAIN_SIDEBAR_CONFIG.MIN_WIDTH,
         max: MAIN_SIDEBAR_CONFIG.MAX_WIDTH,
         currentSize: sidebar.width,
-        onResize: (newWidth) => dispatch(setWidth({ id: SidebarId.MAIN, width: newWidth })),
+        onResize: (newWidth) =>
+            dispatch(setWidth({ id: SidebarId.MAIN, width: newWidth })),
     });
 
     const isExpanded = sidebar.isPinned || isHovered || isResizing;
-    const currentWidth = isExpanded ? sidebar.width : MAIN_SIDEBAR_CONFIG.COLLAPSED_WIDTH;
+    const currentWidth = isExpanded
+        ? sidebar.width
+        : MAIN_SIDEBAR_CONFIG.COLLAPSED_WIDTH;
 
     const handleMouseEnter = useCallback(() => {
         if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-        hoverTimerRef.current = setTimeout(() => setIsHovered(true), HOVER_DELAY_MS);
+        hoverTimerRef.current = setTimeout(
+            () => setIsHovered(true),
+            HOVER_DELAY_MS,
+        );
     }, []);
 
     const handleMouseLeave = useCallback(() => {
@@ -85,7 +106,7 @@ export default function Sidebar() {
             const targetNav = NAV_ITEMS.find((item) => item.id === id);
             if (targetNav?.href) router.push(targetNav.href);
         },
-        [router]
+        [router],
     );
 
     const handleTogglePin = useCallback(() => {
@@ -119,9 +140,14 @@ export default function Sidebar() {
                                 scale: isExpanded ? 1 : 0.8,
                             }}
                             transition={{ duration: 0.2 }}
-                            className={`p-2 rounded-sm hover:bg-primary text-muted-foreground hover:text-primary-foreground shrink-0 ${!isExpanded ? 'pointer-events-none' : ''
-                                }`}
-                            title={sidebar.isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
+                            className={`p-2 rounded-sm hover:bg-primary text-muted-foreground hover:text-primary-foreground shrink-0 ${
+                                !isExpanded ? 'pointer-events-none' : ''
+                            }`}
+                            title={
+                                sidebar.isPinned
+                                    ? 'Unpin sidebar'
+                                    : 'Pin sidebar'
+                            }
                         >
                             {sidebar.isPinned ? (
                                 <PinOff className="w-4 h-4" />

@@ -91,6 +91,7 @@ export function HeroBanner({ films, loading }: HeroBannerProps) {
                         alt={film.name}
                         fill
                         priority
+                        loading="eager"
                         className="object-cover object-center"
                         onError={(e: any) => {
                             e.target.src = '/placeholder-film.jpg';
@@ -131,7 +132,8 @@ export function HeroBanner({ films, loading }: HeroBannerProps) {
                                 }
                                 className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/80 text-foreground font-bold text-xs sm:text-sm rounded-xl transition-all"
                             >
-                                <Play className="w-4 h-4 fill-foreground" /> Xem Ngay
+                                <Play className="w-4 h-4 fill-foreground" /> Xem
+                                Ngay
                             </motion.button>
                             <motion.button
                                 whileHover={{ scale: 1.03 }}
@@ -154,10 +156,11 @@ export function HeroBanner({ films, loading }: HeroBannerProps) {
                         key={i}
                         onClick={() => goTo(i)}
                         aria-label={`Slide ${i + 1}`}
-                        className={`rounded-full transition-all duration-300 ${i === idx
-                            ? 'w-6 h-1.5 bg-primary shadow-md'
-                            : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'
-                            }`}
+                        className={`rounded-full transition-all duration-300 ${
+                            i === idx
+                                ? 'w-6 h-1.5 bg-primary shadow-md'
+                                : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'
+                        }`}
                     />
                 ))}
             </div>

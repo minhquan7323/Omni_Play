@@ -5,7 +5,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Play, Heart, Info } from 'lucide-react';
 import { imgUrl, type HoverInfo } from '../_utils/music.util';
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    QueryClient,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from '@tanstack/react-query';
 import { filmKeys } from '../_constants/film.keys';
 import { FilmService } from '@/services';
 import { useEffect, useState } from 'react';
@@ -42,7 +47,9 @@ export function HoverPreview({ info, onEnter, onLeave }: HoverPreviewProps) {
     const filmData = info?.film;
 
     const { data: favData } = useQuery({
-        queryKey: filmData ? filmKeys.checkFavorite(filmData._id) : ['check-favorite', 'none'],
+        queryKey: filmData
+            ? filmKeys.checkFavorite(filmData._id)
+            : ['check-favorite', 'none'],
         queryFn: () => FilmService.checkFavorite(filmData!._id),
         enabled: !!filmData?._id && !!auth?.accessToken,
         select: (res: any) => res?.data?.favorited,
@@ -65,10 +72,12 @@ export function HoverPreview({ info, onEnter, onLeave }: HoverPreviewProps) {
         },
         onSuccess: () => {
             if (filmData) {
-                queryClient.invalidateQueries({ queryKey: filmKeys.favorites() });
+                queryClient.invalidateQueries({
+                    queryKey: filmKeys.favorites(),
+                });
             }
-            setIsFavorited(prev => !prev);
-        }
+            setIsFavorited((prev) => !prev);
+        },
     });
 
     const handleFavorite = () => {
@@ -91,7 +100,8 @@ export function HoverPreview({ info, onEnter, onLeave }: HoverPreviewProps) {
     const originY = centerY - top;
     const transformOrigin = `${originX}px ${originY}px`;
 
-    const voteScore = filmData?.imdb?.vote_average || filmData?.tmdb?.vote_average;
+    const voteScore =
+        filmData?.imdb?.vote_average || filmData?.tmdb?.vote_average;
 
     return (
         <motion.div
@@ -127,6 +137,7 @@ export function HoverPreview({ info, onEnter, onLeave }: HoverPreviewProps) {
                     alt={info.film.name}
                     fill
                     priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover object-top pointer-events-none transition-transform duration-500"
                     onError={(e: any) => {
                         e.currentTarget.src = '/placeholder-film.jpg';
@@ -170,11 +181,15 @@ export function HoverPreview({ info, onEnter, onLeave }: HoverPreviewProps) {
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.96 }}
                         onClick={handleFavorite}
-                        className={`flex items-center gap-1.5 py-1.5 px-3 font-semibold text-sm rounded-xl border transition-all ${isFavorited
-                            ? 'bg-red-500/15 text-red-400 border-red-500/30 hover:bg-red-500/25'
-                            : 'bg-white/10 text-white border-white/15 hover:bg-white/20'}`}
+                        className={`flex items-center gap-1.5 py-1.5 px-3 font-semibold text-sm rounded-xl border transition-all ${
+                            isFavorited
+                                ? 'bg-red-500/15 text-red-400 border-red-500/30 hover:bg-red-500/25'
+                                : 'bg-white/10 text-white border-white/15 hover:bg-white/20'
+                        }`}
                     >
-                        <Heart className={`w-4 h-4 ${isFavorited ? 'fill-red-400' : ''}`} />
+                        <Heart
+                            className={`w-4 h-4 ${isFavorited ? 'fill-red-400' : ''}`}
+                        />
                         {isFavorited ? 'Đã Thích' : 'Yêu Thích'}
                     </motion.button>
 
