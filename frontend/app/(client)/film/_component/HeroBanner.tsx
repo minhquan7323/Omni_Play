@@ -92,6 +92,7 @@ export function HeroBanner({ films, loading }: HeroBannerProps) {
                         fill
                         priority
                         loading="eager"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover object-center"
                         onError={(e: any) => {
                             e.target.src = '/placeholder-film.jpg';
@@ -156,11 +157,10 @@ export function HeroBanner({ films, loading }: HeroBannerProps) {
                         key={i}
                         onClick={() => goTo(i)}
                         aria-label={`Slide ${i + 1}`}
-                        className={`rounded-full transition-all duration-300 ${
-                            i === idx
+                        className={`rounded-full transition-all duration-300 ${i === idx
                                 ? 'w-6 h-1.5 bg-primary shadow-md'
                                 : 'w-1.5 h-1.5 bg-white/30 hover:bg-white/60'
-                        }`}
+                            }`}
                     />
                 ))}
             </div>
