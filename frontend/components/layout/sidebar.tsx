@@ -11,6 +11,7 @@ import {
     Music,
     Pin,
     PinOff,
+    Download,
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -169,6 +170,22 @@ export default function Sidebar() {
                             activePillClassName="bg-primary/20 rounded-sm"
                         />
                     </div>
+                </div>
+
+                <div className="p-1 mb-2">
+                    <a
+                        href="/downloads/omniplay-setup.exe"
+                        download
+                        className={`flex items-center w-full p-2 text-sm rounded-sm hover:bg-primary/20 text-muted-foreground hover:text-foreground transition-colors ${
+                            !isExpanded ? 'justify-center' : 'px-2'
+                        }`}
+                        title="Download App"
+                    >
+                        <Download className="w-5 h-5 shrink-0" />
+                        {isExpanded && (
+                            <span className="ml-3 truncate font-medium">Tải App</span>
+                        )}
+                    </a>
                 </div>
 
                 <div
