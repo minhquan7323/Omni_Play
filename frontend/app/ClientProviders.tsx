@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { SettingsProvider } from '@/contexts/SettingsContext';
 import { I18nProvider } from '@/contexts/I18nContext';
 import { MiniPlayerProvider } from '@/contexts/MiniPlayerContext';
+import { GameHudProvider } from '@/contexts/GameHudContext';
 import { useServerSettingsSync } from '@/hooks/useServerSettingsSync';
 import { AudioProvider } from '@/providers/audio.provider';
 
@@ -38,9 +39,11 @@ export default function ClientProviders({
                         <I18nProvider>
                             <MiniPlayerProvider>
                                 <AudioProvider>
-                                    <SettingsSyncBridge>
-                                        {children}
-                                    </SettingsSyncBridge>
+                                    <GameHudProvider>
+                                        <SettingsSyncBridge>
+                                            {children}
+                                        </SettingsSyncBridge>
+                                    </GameHudProvider>
                                 </AudioProvider>
                             </MiniPlayerProvider>
                         </I18nProvider>

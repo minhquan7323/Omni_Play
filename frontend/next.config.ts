@@ -21,6 +21,13 @@ const nextConfig = {
             },
         ],
     },
+    // The games moved under /games/* — keep the old URLs working.
+    async redirects() {
+        return [
+            { source: '/liars-bar', destination: '/games/liars-bar', permanent: true },
+            { source: '/typing-fall', destination: '/games/typing-fall', permanent: true },
+        ];
+    },
     async rewrites() {
         return [
             {

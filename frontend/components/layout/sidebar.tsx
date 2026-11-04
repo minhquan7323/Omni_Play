@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_ROUTES } from '@/constants/routes.constant';
 import { MAIN_SIDEBAR_CONFIG, SidebarId } from '@/constants/sidebar.constant';
 import { useResizable } from '@/hooks/useResizable';
 import { setWidth, togglePinned } from '@/store/slices/sidebar.slice';
@@ -23,25 +24,25 @@ const NAV_ITEMS: NavItem[] = [
         id: 'whiteboard',
         icon: <LayoutDashboard className="w-5 h-5" />,
         label: 'Whiteboard',
-        href: '/whiteboard',
+        href: APP_ROUTES.WHITEBOARD.HOME,
     },
     {
-        id: 'liars-bar',
+        id: 'games',
         icon: <Gamepad className="w-5 h-5" />,
-        label: "Liar's Bar",
-        href: '/liars-bar',
+        label: 'Games',
+        href: APP_ROUTES.GAMES.HOME,
     },
     {
         id: 'film',
         icon: <Film className="w-5 h-5" />,
         label: 'Film',
-        href: '/film',
+        href: APP_ROUTES.FILM.HOME,
     },
     {
         id: 'music',
         icon: <Music className="w-5 h-5" />,
         label: 'Music',
-        href: '/music',
+        href: APP_ROUTES.MUSIC.HOME,
     },
 ];
 
@@ -97,6 +98,7 @@ export default function Sidebar() {
 
     const activeTab = useMemo(() => {
         if (pathname.startsWith('/whiteboard')) return 'whiteboard';
+        if (pathname.startsWith('/games')) return 'games';
         if (pathname.startsWith('/film')) return 'film';
         if (pathname.startsWith('/music')) return 'music';
         return null;
@@ -141,9 +143,8 @@ export default function Sidebar() {
                                 scale: isExpanded ? 1 : 0.8,
                             }}
                             transition={{ duration: 0.2 }}
-                            className={`p-2 rounded-sm hover:bg-primary text-muted-foreground hover:text-primary-foreground shrink-0 ${
-                                !isExpanded ? 'pointer-events-none' : ''
-                            }`}
+                            className={`p-2 rounded-sm hover:bg-primary text-muted-foreground hover:text-primary-foreground shrink-0 ${!isExpanded ? 'pointer-events-none' : ''
+                                }`}
                             title={
                                 sidebar.isPinned
                                     ? 'Unpin sidebar'
@@ -176,9 +177,8 @@ export default function Sidebar() {
                     <a
                         href="/downloads/omniplay-setup.exe"
                         download
-                        className={`flex items-center w-full p-2 text-sm rounded-sm hover:bg-primary/20 text-muted-foreground hover:text-foreground transition-colors ${
-                            !isExpanded ? 'justify-center' : 'px-2'
-                        }`}
+                        className={`flex items-center w-full p-2 text-sm rounded-sm hover:bg-primary/20 text-muted-foreground hover:text-foreground transition-colors ${!isExpanded ? 'justify-center' : 'px-2'
+                            }`}
                         title="Download App"
                     >
                         <Download className="w-5 h-5 shrink-0" />

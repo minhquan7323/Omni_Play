@@ -22,6 +22,16 @@ export const APP_ROUTES = {
 
         DETAIL: (slug) => `/film/${slug}`,
         WATCH: (slug: string, ep: string | number = 1, server: number = 0) => `/film/${slug}/watch?ep=${ep}&server=${server}`,
-    }
+    },
 
+    WHITEBOARD: {
+        HOME: '/whiteboard',
+    },
+
+    GAMES: {
+        HOME: '/games',
+        LIARS_BAR: '/games/liars-bar',
+        TYPING_FALL: '/games/typing-fall',
+        WORDLE: '/games/wordle',
+    },
 };

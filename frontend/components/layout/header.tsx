@@ -13,6 +13,7 @@ import { HEADER_HEIGHT } from '../../constants/layout.constant';
 import { FilmHeaderNav } from './header-film-nav';
 import { MAIN_SIDEBAR_CONFIG } from '@/constants/sidebar.constant';
 import { MusicHeaderNav } from './header-music-nav';
+import { useGameHudSlotRef } from '@/contexts/GameHudContext';
 
 export default function Header() {
     const pathname = usePathname();
@@ -24,6 +25,7 @@ export default function Header() {
     };
 
     const headerNavRef = useRef<HTMLDivElement>(null);
+    const gameHudSlotRef = useGameHudSlotRef();
     const dispatch = useDispatch();
 
     const sidebar = useSelector((state: any) => state.sidebar);
@@ -83,6 +85,13 @@ export default function Header() {
                     <div className="text-xs font-semibold text-white/70">
                         Bảng vẽ trực tuyến
                     </div>
+                );
+            case pathname.startsWith('/games'):
+                return (
+                    <div
+                        ref={gameHudSlotRef}
+                        className="flex-1 min-w-0 flex items-center"
+                    />
                 );
             case pathname.startsWith('/music'):
                 return (
