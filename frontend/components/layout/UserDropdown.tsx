@@ -68,7 +68,7 @@ export default function UserDropdown() {
                 >
                     <div className="relative w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 p-[2px] shadow-sm group-hover:scale-105 transition-transform">
                         <div className="w-full h-full rounded-full bg-card flex items-center justify-center font-bold text-xs text-foreground overflow-hidden">
-                            <span>{auth?.user?.username.charAt(0).toUpperCase() + auth?.user?.username.charAt(1).toUpperCase()}</span>
+                            <span>{auth?.user?.username?.charAt(0).toUpperCase() + auth?.user?.username?.charAt(1).toUpperCase()}</span>
                         </div>
                     </div>
                     <ChevronDown

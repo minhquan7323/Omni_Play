@@ -13,6 +13,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { FilmService } from '@/services/film/film.service';
 import { APP_ROUTES } from '@/constants/routes.constant';
 import { filmKeys } from '@/app/(client)/film/_constants/film.keys';
+import { useSelector } from 'react-redux';
 
 interface FilmHeaderNavProps {
     activeDropdown: string | null;
@@ -25,6 +26,7 @@ export function FilmHeaderNav({
     toggleDropdown,
     closeDropdown,
 }: FilmHeaderNavProps) {
+    const user = useSelector((state: any) => state.auth.user);
     const router = useRouter();
     const [query, setQuery] = useState('');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -211,14 +213,15 @@ export function FilmHeaderNav({
                     items={categories}
                     hrefPrefix={APP_ROUTES.FILM.SEARCH + '?category='}
                 />
-
-                <Link
-                    href={APP_ROUTES.FILM.FAVORITES}
-                    onClick={closeDropdown}
-                    className="px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap hover:text-primary hover:bg-primary/20"
-                >
-                    Yêu thích
-                </Link>
+                {user?.isAuthenticated &&
+                    <Link
+                        href={APP_ROUTES.FILM.FAVORITES}
+                        onClick={closeDropdown}
+                        className="px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap hover:text-primary hover:bg-primary/20"
+                    >
+                        Yêu thích
+                    </Link>
+                }
             </div>
         </div>
     );
