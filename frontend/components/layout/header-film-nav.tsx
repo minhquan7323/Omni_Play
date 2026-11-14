@@ -26,7 +26,7 @@ export function FilmHeaderNav({
     toggleDropdown,
     closeDropdown,
 }: FilmHeaderNavProps) {
-    const user = useSelector((state: any) => state.auth.user);
+    const auth = useSelector((state: any) => state.auth);
     const router = useRouter();
     const [query, setQuery] = useState('');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -213,7 +213,7 @@ export function FilmHeaderNav({
                     items={categories}
                     hrefPrefix={APP_ROUTES.FILM.SEARCH + '?category='}
                 />
-                {user?.isAuthenticated &&
+                {auth?.isAuthenticated &&
                     <Link
                         href={APP_ROUTES.FILM.FAVORITES}
                         onClick={closeDropdown}
